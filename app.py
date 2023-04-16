@@ -9,7 +9,8 @@ auth = HTTPBasicAuth()
 
 # Define a dictionary to store valid usernames and passwords
 users = {
-    "user1": "vernalfuture"
+    "chatbot": "grandunified",
+    "user2": "password2"
 }
 
 @auth.verify_password
@@ -24,7 +25,6 @@ def chatbot():
     return render_template('chatbot.html')
 
 @app.route('/chat', methods=['POST'])
-@auth.login_required
 def chat():
     # Get the JSON payload from the request
     data = request.get_json()
@@ -51,6 +51,8 @@ def index():
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
 
 if __name__ == '__main__':
     app.run()

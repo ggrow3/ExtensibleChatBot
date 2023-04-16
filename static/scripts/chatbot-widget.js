@@ -1,10 +1,9 @@
 var ChatbotWidget = /** @class */ (function () {
-    function ChatbotWidget(containerId, chatEndPointApi, chatBotType) {
+    function ChatbotWidget(containerId, chatBotType, chatEndPointApi) {
         if (chatEndPointApi === void 0) { chatEndPointApi = ""; }
         this.container = document.getElementById(containerId);
         this.chatBotType = chatBotType;
-        this.chatEndpointApi = chatEndPointApi;
-        if (this.chatEndpointApi == "") {
+        if (this.chatEndpointApi == "" || this.chatEndpointApi == null) {
             this.chatEndpointApi = window.location.href + "chat";
         }
         if (!this.container) {
@@ -17,7 +16,6 @@ var ChatbotWidget = /** @class */ (function () {
         this.container.innerHTML = "\n      <div class=\"chatbot-widget\">\n        <div class=\"chatbot-chat-area\"></div>\n        <input class=\"chatbot-input-field\" type=\"text\" placeholder=\"Type your message...\">\n      </div>\n    ";
         this.chatArea = this.container.querySelector('.chatbot-chat-area');
         this.inputField = this.container.querySelector('.chatbot-input-field');
-        this.chatEndpointApi = this.chatEndpointApi;
         this.inputField.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 _this.handleUserMessageChat(_this.inputField.value);

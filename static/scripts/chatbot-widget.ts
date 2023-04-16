@@ -5,14 +5,14 @@ class ChatbotWidget {
   private chatEndpointApi: string;
   private chatBotType: string;
 
-  constructor(containerId: string, chatEndPointApi: string = "", chatBotType: string) {
+  constructor(containerId: string, chatBotType: string, chatEndPointApi: string = "") {
     this.container = document.getElementById(containerId) as HTMLElement;
     this.chatBotType = chatBotType;
-    this.chatEndpointApi = chatEndPointApi;
-    if(this.chatEndpointApi == "") {
+  
+    if(this.chatEndpointApi == "" || this.chatEndpointApi == null) {
       this.chatEndpointApi = window.location.href + "chat";
     }
-    
+
     if (!this.container) {
       throw new Error('Container element not found');
     }
@@ -29,7 +29,6 @@ class ChatbotWidget {
 
     this.chatArea = this.container.querySelector('.chatbot-chat-area') as HTMLElement;
     this.inputField = this.container.querySelector('.chatbot-input-field') as HTMLInputElement;
-    this.chatEndpointApi = this.chatEndpointApi;
     
     this.inputField.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
