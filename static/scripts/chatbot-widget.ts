@@ -5,10 +5,14 @@ class ChatbotWidget {
   private chatEndpointApi: string;
   private chatBotType: string;
 
-  constructor(containerId: string, chatEndPointApi: string, chatBotType: string) {
+  constructor(containerId: string, chatEndPointApi: string = "", chatBotType: string) {
     this.container = document.getElementById(containerId) as HTMLElement;
     this.chatBotType = chatBotType;
     this.chatEndpointApi = chatEndPointApi;
+    if(this.chatEndpointApi == "") {
+      this.chatEndpointApi = window.location.href + "chat";
+    }
+    
     if (!this.container) {
       throw new Error('Container element not found');
     }
