@@ -4,6 +4,13 @@ from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.vectorstores import Pinecone
 from langchain.embeddings import OpenAIEmbeddings
+from langchain.chains import LLMChain, ConversationChain
+from langchain.chains.conversation.memory import (ConversationBufferMemory, 
+                                                  ConversationSummaryMemory, 
+                                                  ConversationBufferWindowMemory,
+                                                  ConversationKGMemory)
+from langchain.callbacks import get_openai_callback
+
 import os
 import env_setter
 import pinecone
@@ -19,6 +26,13 @@ class ChatBotService:
         self.openai_api_key = os.environ["OPENAI_API_KEY"]
         self.pinecone_api_key = os.environ["PINECONE_API_KEY"]
         self.pinecone_api_env = os.environ["PINECONE_API_ENV"]
+
+    def count_tokens(self, chain, query):
+        with get_openai_callback() as cb:
+            result = chain.run(query)
+            print(f'Spent a total of {cb.total_tokens} tokens')
+
+        return result
 
     def get_bot_response(self, message, type="fieldmanual"):
         # Define a dictionary that maps the type to the corresponding function
@@ -98,7 +112,53 @@ class ChatBotService:
         
         # If there is no matching response, provide a default response
         return response
+      
+    def get_bot_response_with_conversation_buffer_memory(self, message):
+        llm = OpenAI(temperature=0, openai_api_key=self.openai_api_key)
 
+        conversation_buf = ConversationChain(
+            llm=llm,
+            memory=ConversationBufferMemory()
+        )
+        
+        ct = self.count_tokens(
+            conversation_buf, 
+            message
+        )
+
+        return ct
+
+    def get_bot_response_with_conversation_summary_memory(self, message):
+        llm = OpenAI(temperature=0, openai_api_key=self.openai_api_key)
+
+        conversation_sum = ConversationChain(
+            llm=llm, 
+            memory=ConversationSummaryMemory(llm=llm)
+        )
+
+        ct = self.count_tokens(
+            conversation_sum, 
+            message
+        )
+
+        return ct
+
+    def get_bot_response_with_conversation_buffer_window_memory(self, message):
+        llm = OpenAI(temperature=0, openai_api_key=self.openai_api_key)
+
+        conversation_sum = ConversationChain(
+            llm=llm, 
+            memory=ConversationBufferWindowMemory(k=1)
+        )
+
+        ct = self.count_tokens(
+            conversation_sum, 
+            message
+        )
+
+        return ct
+   
+   
     def get_bot_response_canned(self, message):
         # Define simple predefined responses based on user input
         responses = {
@@ -112,6 +172,4 @@ class ChatBotService:
 
         # If there is no matching response, provide a default response
         return response or 'I am not sure how to respond to that.'
-
-
 
