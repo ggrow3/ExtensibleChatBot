@@ -27,6 +27,15 @@ class ChatBotService:
         self.pinecone_api_key = os.environ["PINECONE_API_KEY"]
         self.pinecone_api_env = os.environ["PINECONE_API_ENV"]
 
+        self.llm = OpenAI(temperature=0, openai_api_key=self.openai_api_key)
+
+        self.conversation_buf = ConversationChain(
+            llm= self.llm,
+            memory=ConversationBufferMemory()
+        )
+
+     
+
     def count_tokens(self, chain, query):
         with get_openai_callback() as cb:
             result = chain.run(query)
@@ -41,7 +50,8 @@ class ChatBotService:
             "fieldmanual": self.get_bot_response_field_manual,
             "canned": self.get_bot_response_canned,
             "wolfram": self.get_bot_response_wolfram_alpha,
-            "serpapi": self.get_bot_response_serapi
+            "serpapi": self.get_bot_response_serapi,
+            "conversationbuffermemory":self.get_bot_response_with_conversation_buffer_memory
         }
         
         # Get the appropriate function based on the type argument
@@ -55,12 +65,11 @@ class ChatBotService:
         return response_function(message)
     
     def get_bot_response_serapi(self, message):
-        llm = OpenAI(temperature=0)
-
+     
         tool_names = ["serpapi"]
         tools = load_tools(tool_names)
 
-        agent = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True)
+        agent = initialize_agent(tools, self.llm, agent="zero-shot-react-description", verbose=True)
 
         response = agent.run(message)
 
@@ -80,11 +89,11 @@ class ChatBotService:
         return reply
     
     def get_bot_response_wolfram_alpha(self, message):
-        llm = OpenAI(temperature=0)
+      
         tool_names = ["wolfram-alpha"]
         tools = load_tools(tool_names)
         
-        agent = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True)
+        agent = initialize_agent(tools, self.llm, agent="zero-shot-react-description", verbose=True)
 
         response = agent.run(message)
 
@@ -101,9 +110,8 @@ class ChatBotService:
         embeddings = OpenAIEmbeddings(openai_api_key=self.openai_api_key )
         pine = Pinecone.from_existing_index(index_name, embeddings)
 
-        openAI = OpenAI(temperature=0, openai_api_key=self.openai_api_key )
 
-        chain = load_qa_chain(openAI, chain_type="stuff")
+        chain = load_qa_chain(self.llm, chain_type="stuff")
 
         docs = pine.similarity_search(message, include_metadata=True)
         response = chain.run(input_documents=docs, question=message)
@@ -114,26 +122,19 @@ class ChatBotService:
         return response
       
     def get_bot_response_with_conversation_buffer_memory(self, message):
-        llm = OpenAI(temperature=0, openai_api_key=self.openai_api_key)
-
-        conversation_buf = ConversationChain(
-            llm=llm,
-            memory=ConversationBufferMemory()
-        )
+        #https://www.pinecone.io/learn/langchain-conversational-memory/
         
         ct = self.count_tokens(
-            conversation_buf, 
+            self.conversation_buf, 
             message
         )
 
         return ct
 
     def get_bot_response_with_conversation_summary_memory(self, message):
-        llm = OpenAI(temperature=0, openai_api_key=self.openai_api_key)
-
         conversation_sum = ConversationChain(
-            llm=llm, 
-            memory=ConversationSummaryMemory(llm=llm)
+            llm=self.llm, 
+            memory=ConversationSummaryMemory(llm=self.llm)
         )
 
         ct = self.count_tokens(

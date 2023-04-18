@@ -17,6 +17,7 @@
       <h1 class="display-6 fw-bold text-primary">Chatbot Widgets</h1>
     </div>
   </main>
+  <link rel="stylesheet" href="/static/css/chatbot.css" >
   <!-- Include the chatbot widget JavaScript file -->
   <script src="/static/scripts/chatbot-widget.js"></script>
 
@@ -57,6 +58,17 @@
         <!-- Initialize the chatbot widget by passing the container ID -->
         <script>
           new ChatbotWidget('chatbot-container4', 'serpapi');
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h3>Conversation Buffer Memory</h3>
+        <!-- Create a container for the chatbot widget -->
+        <div id="chatbot-container5"></div>
+        <!-- Initialize the chatbot widget by passing the container ID -->
+        <script>
+          new ChatbotWidget('chatbot-container5', 'conversationbuffermemory');
         </script>
       </td>
     </tr>

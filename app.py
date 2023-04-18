@@ -3,18 +3,16 @@ from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for, jsonify)
 from flask_httpauth import HTTPBasicAuth
 from chatbot_service import ChatBotService
+from env_setter import get_users
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 
 # Define a dictionary to store valid usernames and passwords
-users = {
-    "chatbot": "grandunified",
-    "user2": "password2"
-}
 
 @auth.verify_password
 def verify_password(username, password):
+    users = get_users()
     if username in users and users[username] == password:
         return username
 
