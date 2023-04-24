@@ -1,5 +1,4 @@
-from langchain.agents import load_tools
-from langchain.agents import initialize_agent
+from langchain.agents import load_tools,initialize_agent
 from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.vectorstores import Pinecone
@@ -10,13 +9,11 @@ from langchain.chains.conversation.memory import (ConversationBufferMemory,
                                                   ConversationBufferWindowMemory,
                                                   ConversationKGMemory)
 from langchain.callbacks import get_openai_callback
-
 import os
 import env_setter
 import pinecone
 import openai
-import env_setter
-from langchain.agents import load_tools
+
 
 
 class ChatBotService:
