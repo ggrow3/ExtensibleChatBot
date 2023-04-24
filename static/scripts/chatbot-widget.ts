@@ -2,6 +2,7 @@ class ChatbotWidget {
   private container: HTMLElement;
   private chatArea: HTMLElement;
   private inputField: HTMLInputElement;
+  private button: HTMLButtonElement;
   private chatEndpointApi: string;
   private chatBotType: string;
 
@@ -24,17 +25,24 @@ class ChatbotWidget {
       <div class="chatbot-widget">
         <div class="chatbot-chat-area"></div>
         <input class="chatbot-input-field" type="text" placeholder="Type your message...">
+        <button class="chatbot-button" onclick="sendMessage()">Send</button>
       </div>
     `;
 
     this.chatArea = this.container.querySelector('.chatbot-chat-area') as HTMLElement;
     this.inputField = this.container.querySelector('.chatbot-input-field') as HTMLInputElement;
+    this.button = this.container.querySelector('.chatbot-button') as HTMLButtonElement;
     
     this.inputField.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         this.handleUserMessageChat(this.inputField.value);
         this.inputField.value = '';
       }
+    });
+
+    this.button.addEventListener('click', (event) => {
+        this.handleUserMessageChat(this.inputField.value);
+        this.inputField.value = '';
     });
   }
 

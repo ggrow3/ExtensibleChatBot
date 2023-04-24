@@ -13,14 +13,19 @@ var ChatbotWidget = /** @class */ (function () {
     }
     ChatbotWidget.prototype.render = function () {
         var _this = this;
-        this.container.innerHTML = "\n      <div class=\"chatbot-widget\">\n        <div class=\"chatbot-chat-area\"></div>\n        <input class=\"chatbot-input-field\" type=\"text\" placeholder=\"Type your message...\">\n      </div>\n    ";
+        this.container.innerHTML = "\n      <div class=\"chatbot-widget\">\n        <div class=\"chatbot-chat-area\"></div>\n        <input class=\"chatbot-input-field\" type=\"text\" placeholder=\"Type your message...\">\n        <button class=\"chatbot-button\" onclick=\"sendMessage()\">Send</button>\n      </div>\n    ";
         this.chatArea = this.container.querySelector('.chatbot-chat-area');
         this.inputField = this.container.querySelector('.chatbot-input-field');
+        this.button = this.container.querySelector('.chatbot-button');
         this.inputField.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 _this.handleUserMessageChat(_this.inputField.value);
                 _this.inputField.value = '';
             }
+        });
+        this.button.addEventListener('click', function (event) {
+            _this.handleUserMessageChat(_this.inputField.value);
+            _this.inputField.value = '';
         });
     };
     ChatbotWidget.prototype.handleUserMessageChat = function (message) {
