@@ -1,5 +1,8 @@
 # Import the ChatBotService class
 import chatbot_service
+import env_setter
+
+env_setter.setup_keys()
 
 # Create an instance of the ChatBotService class
 chatbot_service = chatbot_service.ChatBotService()
