@@ -2,6 +2,7 @@
 import chatbot_service
 import env_setter
 
+
 env_setter.setup_keys()
 
 # Create an instance of the ChatBotService class
@@ -27,3 +28,4 @@ while True:
     
     
 
+#chatbot_service.chat_with_knowledge_base("knowledge_base.json")
