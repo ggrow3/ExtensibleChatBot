@@ -6,7 +6,7 @@ from chatbot_service import ChatBotService
 from langchain_service import LangChainService
 from knowledge_base_service import KnowledgeBaseService
 from env_setter import (get_users,setup_keys)
-import pinecone
+
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
