@@ -81,6 +81,18 @@ class LangChainService:
         reply: str = openai(prompt_template.format(query=message))
         return reply
 
+    def get_bot_response_google_wolfram(self, message):
+
+        tool_names = ["serpapi", "wolfram-alpha"]
+        tools = load_tools(tool_names)
+
+        agent = initialize_agent(
+            tools, self.llm, agent="zero-shot-react-description", verbose=True)
+
+        response = agent.run(message)
+
+        return response
+
     def get_bot_response_chat_completions(self, message: str) -> str:
         
         chatOpenAI = ChatOpenAI(
