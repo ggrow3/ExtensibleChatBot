@@ -5,7 +5,7 @@ from chatbot_service import ChatBotService
 
 def call_get_bot_response(message, type=""):
     chatBotService = ChatBotService()
-    response = chatBotService.get_bot_response(message, type)
+    response = chatBotService.chat_with_langchain(message, type)(message, type)
     print(response)
 
 # Call the function with some example messages

@@ -8,4 +8,6 @@ pinecone-client==2.2.1
 flask-httpauth
 tiktoken
 openai
+discord
+pip install discord-py-slash-command
 

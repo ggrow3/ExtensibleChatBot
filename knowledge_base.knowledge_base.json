@@ -1,0 +1,30 @@
+[
+  {
+    "question": "hello",
+    "answer": "howdy"
+  },
+  {
+    "question": "howdy!",
+    "answer": "hi"
+  },
+  {
+    "question": "what is this?",
+    "answer": "I am "
+  },
+  {
+    "question": "how are you?",
+    "answer": "howdy"
+  },
+  {
+    "question": "hi",
+    "answer": "how is it?"
+  },
+  {
+    "question": "what?",
+    "answer": "what now!!!!"
+  },
+  {
+    "question": "what are you doing today?",
+    "answer": "I'm being a bot"
+  }
+]
