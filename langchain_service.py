@@ -11,6 +11,7 @@ from langchain.chains.conversation.memory import (ConversationBufferMemory,
 from langchain.callbacks import get_openai_callback
 from langchain import PromptTemplate
 from langchain.chat_models import ChatOpenAI
+import pinecone
 
 # langchain_service.py
 

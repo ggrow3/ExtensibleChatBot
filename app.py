@@ -5,7 +5,8 @@ from flask_httpauth import HTTPBasicAuth
 from chatbot_service import ChatBotService
 from langchain_service import LangChainService
 from knowledge_base_service import KnowledgeBaseService
-from env_setter import get_users
+from env_setter import (get_users,setup_keys)
+import pinecone
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -33,14 +34,15 @@ def chat():
     message = data.get('message')
 
     chatbotType = data.get('chatBotType')
-
+    
+    setup_keys()
     #Initialize services
     langchain_service = LangChainService(
         os.environ["OPENAI_API_KEY"],  os.environ["PINECONE_API_KEY"],  os.environ["PINECONE_API_ENV"])
     knowledge_base_service = KnowledgeBaseService()
     chatbotService = ChatBotService(langchain_service, knowledge_base_service)
     # Process the message and generate a response
-    response = chatbotService.chat_with_langchain(message, type)
+    response = chatbotService.chat_with_langchain(message, chatbotType)
 
     # Return the response as a JSON object
     return jsonify({'response': response})
