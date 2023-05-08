@@ -38,7 +38,7 @@ def chat():
     setup_keys()
     #Initialize services
     langchain_service = LangChainService(
-        os.environ["OPENAI_API_KEY"],  os.environ["PINECONE_API_KEY"],  os.environ["PINECONE_API_ENV"])
+        os.environ["OPENAI_API_KEY"],  os.environ["PINECONE_API_KEY"],  os.environ["PINECONE_API_ENV"], )
     knowledge_base_service = KnowledgeBaseService()
     chatbotService = ChatBotService(langchain_service, knowledge_base_service)
     # Process the message and generate a response

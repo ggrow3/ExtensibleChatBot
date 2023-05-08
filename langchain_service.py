@@ -13,8 +13,6 @@ from langchain import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 import pinecone
 
-# langchain_service.py
-
 
 class LangChainService:
     def __init__(self, openai_api_key, pinecone_api_key, pinecone_api_env):
@@ -31,7 +29,7 @@ class LangChainService:
             memory=ConversationBufferMemory()
         )
 
-    def count_tokens(self, chain: Union[LLMChain, ConversationChain], query: str) -> str:
+    def _count_tokens(self, chain: Union[LLMChain, ConversationChain], query: str) -> str:
         with get_openai_callback() as cb:
             result: str = chain.run(query)
             print(f'Spent a total of {cb.total_tokens} tokens')
@@ -139,7 +137,7 @@ class LangChainService:
     def get_bot_response_with_conversation_buffer_memory(self, message):
         # https://www.pinecone.io/learn/langchain-conversational-memory/
 
-        ct = self.count_tokens(
+        ct = self._count_tokens(
             self.conversation_buf,
             message
         )
@@ -152,7 +150,7 @@ class LangChainService:
             memory=ConversationSummaryMemory(llm=self.llm)
         )
 
-        ct = self.count_tokens(
+        ct = self._count_tokens(
             conversation_sum,
             message
         )
@@ -160,14 +158,13 @@ class LangChainService:
         return ct
 
     def get_bot_response_with_conversation_buffer_window_memory(self, message):
-        llm = OpenAI(temperature=0, openai_api_key=self.openai_api_key)
-
+     
         conversation_sum = ConversationChain(
-            llm=llm,
+            llm=self.llm,
             memory=ConversationBufferWindowMemory(k=1)
         )
 
-        ct = self.count_tokens(
+        ct = self._count_tokens(
             conversation_sum,
             message
         )

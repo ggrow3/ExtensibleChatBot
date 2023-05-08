@@ -59,7 +59,19 @@ var ChatbotWidget = /** @class */ (function () {
     ChatbotWidget.prototype.addMessageToChat = function (sender, message) {
         var messageElement = document.createElement('div');
         messageElement.className = 'chatbot-message';
-        messageElement.innerHTML = "<strong>".concat(sender, ":</strong> ").concat(message);
+        // Get the current date and time
+        var timestamp = new Date();
+        // Format the timestamp as desired (e.g., "HH:mm:ss")
+        var formattedTimestamp = timestamp.toLocaleTimeString();
+        // Include the bot name in the message element for bot responses
+        if (sender === 'Bot') {
+            messageElement.classList.add('bot-message'); // Add a CSS class for bot messages
+        }
+        else {
+            messageElement.classList.add('user-message'); // Add a CSS class for user messages
+        }
+        // Include the timestamp in the message element
+        messageElement.innerHTML = "<div class=\"message-bubble\"><strong>".concat(sender, " (").concat(formattedTimestamp, "):</strong> ").concat(message, "</div>");
         this.chatArea.appendChild(messageElement);
     };
     ChatbotWidget.prototype.getBotResponse = function (message) {

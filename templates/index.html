@@ -15,62 +15,47 @@
       <h1 class="display-6 fw-bold text-primary">Chatbot Widgets</h1>
     </div>
   </main>
-  <link rel="stylesheet" href="/static/css/chatbot.css" >
+  <link rel="stylesheet" href="/static/css/chatbot.css">
   <!-- Include the chatbot widget JavaScript file -->
   <script src="/static/scripts/chatbot-widget.js"></script>
 
-  <!-- Create a table to hold the chatbot widgets -->
-  <table class="chatbot-table">
-    <tr>
-      <td>
-        <h3>Chatgpt 3.5 Turbo</h3>
-        <!-- Create a container for the chatbot widget -->
-        <div id="chatbot-container1"></div>
-        <!-- Initialize the chatbot widget by passing the container ID -->
-        <script>
-          new ChatbotWidget('chatbot-container1', 'chatgpt4');
-        </script>
-      </td>
-      <td>
-        <h3>Pinecone Army Field Manual</h3>
-        <!-- Create a container for the chatbot widget -->
-        <div id="chatbot-container2"></div>
-        <!-- Initialize the chatbot widget by passing the container ID -->
-        <script>
-          new ChatbotWidget('chatbot-container2', 'fieldmanual');
-        </script>
-      </td>
-      <td>
-        <h3>Wolfram Alpha</h3>
-        <!-- Create a container for the chatbot widget -->
-        <div id="chatbot-container3"></div>
-        <!-- Initialize the chatbot widget by passing the container ID -->
-        <script>
-          new ChatbotWidget('chatbot-container3', 'wolfram');
-        </script>
-      </td>
-      <td>
-        <h3>Google Search</h3>
-        <!-- Create a container for the chatbot widget -->
-        <div id="chatbot-container4"></div>
-        <!-- Initialize the chatbot widget by passing the container ID -->
-        <script>
-          new ChatbotWidget('chatbot-container4', 'serpapi');
-        </script>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <h3>Conversation Buffer Memory</h3>
-        <!-- Create a container for the chatbot widget -->
-        <div id="chatbot-container5"></div>
-        <!-- Initialize the chatbot widget by passing the container ID -->
-        <script>
-          new ChatbotWidget('chatbot-container5', 'conversationbuffermemory');
-        </script>
-      </td>
-    </tr>
-  </table>
+  <!-- Create a dropdown menu to select the chatbot widget -->
+  <div class="chatbot-selection">
+    <label for="chatbot-dropdown">Select a Chatbot:</label>
+    <select id="chatbot-dropdown">
+      <option value="">--Select--</option>
+      <option value="chatgpt4">Chatgpt 3.5 Turbo</option>
+      <option value="fieldmanual">Pinecone Army Field Manual</option>
+      <option value="wolfram">Wolfram Alpha</option>
+      <option value="serpapi">Google Search</option>
+      <option value="conversationbuffermemory">Conversation Buffer Memory</option>
+    </select>
+  </div>
+
+  <!-- Create a container for the selected chatbot widget -->
+  <div id="chatbot-container"></div>
+
+  <!-- JavaScript code to handle chatbot selection -->
+  <script>
+    const chatbotDropdown = document.getElementById('chatbot-dropdown');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    let currentChatbotWidget = null;
+
+    chatbotDropdown.addEventListener('change', function () {
+      const chatBotType = chatbotDropdown.value;
+      chatbotContainer.innerHTML = ''; // Clear the container
+
+      // Destroy the previous chatbot widget if it exists
+      if (currentChatbotWidget && currentChatbotWidget.destroy) {
+        currentChatbotWidget.destroy();
+      }
+
+      // Initialize the selected chatbot widget
+      if (chatBotType) {
+        currentChatbotWidget = new ChatbotWidget('chatbot-container', chatBotType);
+      }
+    });
+  </script>
 </body>
 
 </html>

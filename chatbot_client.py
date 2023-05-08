@@ -7,6 +7,8 @@ import os
 #set up keys
 env_setter.setup_keys()
 
+
+
 #Initialize services
 langchain_service = LangChainService(
     os.environ["OPENAI_API_KEY"],  os.environ["PINECONE_API_KEY"],  os.environ["PINECONE_API_ENV"])
@@ -34,5 +36,5 @@ while True:
     print(response)
     
 #Access the other chatbot service
-#response_knowledge = chatbot_service.chat_with_knowledge_base("knowledge_base.knowledge_base.json")  
+response_knowledge = chatbot_service.chat_with_knowledge_base("knowledge_base.knowledge_base.json")  
 
