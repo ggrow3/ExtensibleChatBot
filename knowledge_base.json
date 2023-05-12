@@ -22,5 +22,13 @@
   {
     "question": "hello",
     "answer": "hi back"
+  },
+  {
+    "question": "what's up?",
+    "answer": "the sky"
+  },
+  {
+    "question": "",
+    "answer": "the sky"
   }
 ]

@@ -5,7 +5,7 @@ from flask_httpauth import HTTPBasicAuth
 from chatbot_service import ChatBotService
 from langchain_service import LangChainService
 from knowledge_base_service import KnowledgeBaseService
-from env_setter import (get_users,setup_keys)
+from chatbot_settings import (get_users,setup_keys)
 
 
 app = Flask(__name__)

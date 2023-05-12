@@ -128,3 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 env_setter.py
+chatbot_settings.py

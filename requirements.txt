@@ -9,5 +9,6 @@ flask-httpauth
 tiktoken
 openai
 discord
-pip install discord-py-slash-command
+discord-py-slash-command
+colorama
 
