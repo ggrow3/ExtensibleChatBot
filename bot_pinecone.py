@@ -31,7 +31,7 @@ class BotPineCone(BotAbstract):
 
         self.llm = chatBotSettings.llm
         self.memory = chatBotSettings.memory
-        self.index_name = "fieldmanual"
+        self.index_name = ChatBotSettings().PINECONE_INDEX()
 
     def get_bot_response(self, message):
         pinecone.init(

@@ -10,6 +10,8 @@ from bot_agent_tools import BotAgentTools
 from langchain import (HuggingFaceHub, Cohere)
 from langchain.chat_models import ChatOpenAI
 from colorama import Fore, Style, init
+from bot_dalle_imagine import BotDalle
+from bot_gtts_audio import BotGtts
 
 
 class ChatBotFactory:
@@ -17,7 +19,9 @@ class ChatBotFactory:
         'BotConversationChain': BotConversationChain,
         'BotPineCone': BotPineCone,
         'BotAgentTools': BotAgentTools,
-        'BotKnowledgeBase': BotKnowledgeBase
+        'BotKnowledgeBase': BotKnowledgeBase,
+        'BotDalle': BotDalle,
+        "BotGtts": BotGtts
     }
 
     llms = {

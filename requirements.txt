@@ -11,4 +11,5 @@ openai
 discord
 discord-py-slash-command
 colorama
+gTTS
 

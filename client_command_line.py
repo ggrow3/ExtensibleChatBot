@@ -9,9 +9,6 @@ from langchain.chains.conversation.memory import (ConversationBufferMemory,
 from colorama import Fore, Style, init
 from langchain.llms import Cohere
 
-
-
-
 # from colorama import Fore, Style, init
 init(autoreset=True)
 
@@ -35,8 +32,12 @@ while True:
     # Get the chatbot's response using the get_bot_response_chat_completions method
     response = chatbot.get_bot_response(user_input)
     
-    # Print the chatbot's response
-    print(Fore.GREEN + response)
+    if(type(response).__name__ == "gTTS"):
+       response.save("welcome.mp3")
+       break
+    elif(type(response) == "str"):
+        # Print the chatbot's response
+        print(Fore.GREEN + response)
     
 
 

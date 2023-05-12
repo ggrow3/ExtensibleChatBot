@@ -1,8 +1,16 @@
 import os
+from typing import Dict, Type
+from langchain.chat_models import ChatOpenAI
+import openai
+from bot_abstract_class import BotAbstract
 
 
 class ChatBotSettings:
-    def __init__(self):
+    
+    def __init__(self, memory = None, llm= None, tools = None):
+        self.memory = memory
+        self.llm = llm
+        self.tools = tools
         self.set_environment_variables()
         self.users = self.get_users()
 
@@ -13,51 +21,53 @@ class ChatBotSettings:
         os.environ["WOLFRAM_ALPHA_APPID"] = ""
         os.environ["SERPAPI_API_KEY"] = ""
         os.environ["OPENAI_ORGANIZATION_ID"] = ""
-        os.environ["DISCORD_BOT_TOKEN"] = "A"
-
-    @property
-    def PINECONE_API_KEY(self):
+        os.environ["DISCORD_BOT_TOKEN"] = ""
+        os.environ["KNOWLEDGE_BASE_FILE"] = ""
+        os.environ["COHERE_API_KEY"] = ""
+        os.environ["HUGGINGFACEHUB_API_TOKEN"] = ""
+    
+    @classmethod
+    def PINECONE_API_KEY(cls):
         return os.environ.get("PINECONE_API_KEY")
 
-    @property
-    def PINECONE_API_ENV(self):
+    @classmethod
+    def PINECONE_API_ENV(cls):
         return os.environ.get("PINECONE_API_ENV")
 
-    @property
-    def OPENAI_API_KEY(self):
+    @classmethod
+    def OPENAI_API_KEY(cls):
         return os.environ.get("OPENAI_API_KEY")
 
-    @property
-    def WOLFRAM_ALPHA_APPID(self):
+    @classmethod
+    def WOLFRAM_ALPHA_APPID(cls):
         return os.environ.get("WOLFRAM_ALPHA_APPID")
 
-    @property
-    def SERPAPI_API_KEY(self):
+    @classmethod
+    def SERPAPI_API_KEY(cls):
         return os.environ.get("SERPAPI_API_KEY")
 
-    @property
-    def OPENAI_ORGANIZATION_ID(self):
+    @classmethod
+    def OPENAI_ORGANIZATION_ID(cls):
         return os.environ.get("OPENAI_ORGANIZATION_ID")
 
-    @property
-    def DISCORD_BOT_TOKEN(self):
-        return os.environ.get("DISCORD_BOT_TOKEN")
-
-    @property
-    def KNOWLEDGE_BASE_FILE(self):
-        return "knowledge_base.knowledge_base.json"
-
     @classmethod
-    def get_chat_open_ai(cls: Type) -> ChatOpenAI:
-        chatbotSettings = cls()
-        return ChatOpenAI(temperature=0, openai_api_key=chatbotSettings.OPENAI_API_KEY)
+    def DISCORD_BOT_TOKEN(cls):
+        return os.environ.get("DISCORD_BOT_TOKEN")
+    
+    @classmethod
+    def COHERE_API_KEY(cls):
+        return os.environ.get("COHERE_API_KEY")
+    
+    @classmethod
+    def HUGGING_FACE_API_KEY(cls):
+        return os.environ.get("HUGGINGFACEHUB_API_TOKEN")
+       
+    @classmethod
+    def KNOWLEDGE_BASE_FILE(cls):
+        return "knowledge_base.json"
 
-    def get_llm_models():
-        openai.organization = self.OPENAI_ORGANIZATION_ID
-        openai.api_key = self.OPENAI_API_KEY
-        
+    def get_openai_models():
         model_list = openai.Model.list()['data']
-        print(model_list)
         model_ids = [x['id'] for x in model_list]
         model_ids.sort()
         pprint.pprint(model_ids)

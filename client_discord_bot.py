@@ -2,14 +2,20 @@
 import discord
 from discord.ext import commands
 import os
-from env_setter import ChatBotSettings
-import chatbot_service
 from discord import app_commands
 import discord
 import asyncio
 import json
-from langchain_service import LangChainService
-from knowledge_base_service import KnowledgeBaseService
+from chatbot_factory import ChatBotFactory
+from langchain import (OpenAI,HuggingFaceHub, Cohere)
+from chatbot_settings import ChatBotSettings
+import os
+from langchain.chains.conversation.memory import (ConversationBufferMemory,
+                                                  ConversationSummaryMemory,
+                                                  ConversationBufferWindowMemory,
+                                                  ConversationKGMemory)
+from colorama import Fore, Style, init
+from langchain.llms import Cohere
 
 
 # https://cloud.google.com/blog/topics/developers-practitioners/build-and-run-discord-bot-top-google-cloud
@@ -154,21 +160,18 @@ async def on_message(message):
 
 @bot.tree.command(name="chatgpt", description="this is chatgpt")
 @app_commands.describe(thing_to_say="say hello to the chatbot")
-@app_commands.describe(version="versions are chatgpt4, fieldmanual, canned, wolfram,serpapi,conversationbuffermemory")
+@app_commands.describe(version="versions are BotConversationChainy")
 async def chat(interaction: discord.Interaction, thing_to_say: str, version: str):
     print("Received interaction")
 
     await interaction.response.defer()
 
-    chatBotSettings = ChatBotSettings()
-  
-      
-    chatOpenAI : ChatOpenAI = ChatOpenAI(
-            temperature=0, openai_api_key=self.chatbotSettings.OPENAI_API_KEY)
-    langchain_service = LangChainService(chatBotSettings, chatOpenAI)
-    knowledge_base_service = KnowledgeBaseService()
-    chatBotService = chatbot_service.ChatBotService(langchain_service,knowledge_base_service)
-    response = chatBotService.chat_with_langchain(thing_to_say, version)
+    chatbot_factory = ChatBotFactory()
+
+    chatbot = chatbot_factory.create_service(version, ChatBotSettings(llm=ChatBotFactory().llms["ChatOpenAI"],memory=ConversationBufferMemory(), tools=['serpapi','wolfram-alpha']))
+
+    response = chatbot.get_bot_response(thing_to_say)
+    
     await interaction.followup.send(response)
 
 

@@ -1,12 +1,12 @@
 import os
 import openai
-from env_setter import ChatBotSettings
+from chatbot_settings import ChatBotSettings
 
 i = ChatBotSettings()
 # Your API Key Here: 👇
-openai.api_key = i.OPENAI_API_KEY
+openai.api_key = ChatBotSettings().OPENAI_API_KEY()
 # Your Image Prompt Here: 👇
-prompt = "A Chat bot floating in the clouds"
+prompt = "Create a factory that produces chatbots"
 response = openai.Image.create(
     prompt=prompt,
     n=1,
