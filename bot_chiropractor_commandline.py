@@ -21,6 +21,26 @@ class BotConversationChain(BotAbstract):
     def get_bot_response(self, text: str):
         reply = self.conversation_buf(text)
       
+        questions = [
+             {
+                "question": "What is your name?",
+                "type": "open-ended"
+            },
+            {
+                "question": "What hurts?",
+                "type": "open-ended"
+            },
+            {
+                "question": "What is your level of pain?",
+                "type": "numerical"
+            },
+            {
+                "question": "Do you have any other symptoms?",
+                "type": "open-ended"
+            }
+        ]
+
+
         return reply['response']
 
 

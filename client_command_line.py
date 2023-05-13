@@ -1,5 +1,4 @@
 from chatbot_factory import ChatBotFactory
-from langchain import (OpenAI,HuggingFaceHub, Cohere)
 from chatbot_settings import ChatBotSettings
 import os
 from langchain.chains.conversation.memory import (ConversationBufferMemory,
@@ -7,7 +6,6 @@ from langchain.chains.conversation.memory import (ConversationBufferMemory,
                                                   ConversationBufferWindowMemory,
                                                   ConversationKGMemory)
 from colorama import Fore, Style, init
-from langchain.llms import Cohere
 
 # from colorama import Fore, Style, init
 init(autoreset=True)
@@ -16,7 +14,7 @@ chatbot_factory = ChatBotFactory()
 
 selected_bot = ChatBotFactory().select_chatbot(ChatBotFactory.services, "Please select a chatbot from the following options:")
 
-chatbot = chatbot_factory.create_service(selected_bot, ChatBotSettings(llm=ChatBotFactory().llms["ChatOpenAI"],memory=ConversationBufferMemory(), tools=['serpapi','wolfram-alpha']))
+chatbot = chatbot_factory.create_service(selected_bot, ChatBotSettings(llm=ChatBotFactory().llms[ChatBotFactory().LLM_CHAT_OPENAI],memory=ConversationBufferMemory(), tools=['serpapi','wolfram-alpha']))
 
 print(Fore.GREEN + "Please enter a prompt:")
 

@@ -19,20 +19,11 @@ class BotStoryImagine(ABC):
    
     def __init__(self, settings: Any):
          self.llm = settings.llm
-         self.memory = settings.memory
         
-
 
     def get_bot_response(self, text: str) -> str:
         language = 'en'
         
-        test_llm = ChatOpenAI(
-            temperature=0,
-            openai_api_key=ChatBotSettings().OPENAI_API_KEY(),
-            model_name="gpt-3.5-turbo"
-        )
-
-       
         messages = [
             SystemMessage(content="You are an adventure mystery cartoon story telling bot."),
             HumanMessage(content="Hi AI, what are your main themes?"),
@@ -40,12 +31,12 @@ class BotStoryImagine(ABC):
             HumanMessage(content="I'd like to have you tell me an adventure story with Colin and Ian as my characters.Santorini is a bad guy in the story and so are pollution and externalities caused by man. Tell about regreening earth")
         ]
 
-        reply = test_llm(messages)
+        reply = self.llm(messages)
 
         rs = reply.content
 
         myobj = gTTS(text=rs, lang=language, slow=False)
-        myobj.save("welcome.mp3")
+        myobj.save("story.mp3")
 
         response = openai.Image.create(
             prompt=text,
@@ -82,19 +73,16 @@ class BotStoryImagine(ABC):
     
 
         # Generate PDF
-        document.build(elements)
+        pdf = document.build(elements)
+
+        response = ResponseMultiModal(audio, pdf, text, image)
+
+        return response
 
        
 
 
 
-class ResponseMultiModal:
-
-    def __init__(self, settings: Any):
-        self.audio = ""
-        self.pdf = ""
-        self.text = ""
-        self.imageurl = ""
 
    
 

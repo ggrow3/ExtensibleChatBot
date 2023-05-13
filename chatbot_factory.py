@@ -1,5 +1,4 @@
 import os
-import json
 from typing import Callable, Dict, List, Optional, Union, Tuple
 from chatbot_settings import ChatBotSettings
 from bot_conversation_chain import BotConversationChain
@@ -27,14 +26,18 @@ class ChatBotFactory:
         BotStoryImagine.__name__: BotStoryImagine
     }
 
+    LLM_CHAT_OPENAI = "ChatOpenAI"
+    LLM_COHERE = "Cohere"
+    LLM_HUGGINGFACE_HUB = "HuggingFaceHub"
+
     llms = {
-        "ChatOpenAI": ChatOpenAI(
+        LLM_CHAT_OPENAI: ChatOpenAI(
             temperature=0,
             openai_api_key=ChatBotSettings().OPENAI_API_KEY(),
             model_name="gpt-3.5-turbo"
         ),
-        "Cohere": Cohere(model='command-xlarge'),
-        "HuggingFaceHub": HuggingFaceHub(
+        LLM_COHERE: Cohere(model='command-xlarge'),
+        LLM_HUGGINGFACE_HUB: HuggingFaceHub(
             repo_id="facebook/mbart-large-50",
             model_kwargs={"temperature": 0, "max_length": 200},
             huggingfacehub_api_token=ChatBotSettings().HUGGING_FACE_API_KEY()
