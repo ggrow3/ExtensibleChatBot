@@ -32,7 +32,7 @@ def inspect_object(obj, parent_class_name=None):
 
 
 
-setup_keys()
+
 
 chatOpenAI : ChatOpenAI = ChatOpenAI(
             temperature=0, openai_api_key=self.chatbotSettings.OPENAI_API_KEY)

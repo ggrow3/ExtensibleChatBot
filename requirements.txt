@@ -1,4 +1,4 @@
-Flask==2.0.2
+Flask==2.2.5
 wolframalpha
 google-search-results==2.4.2
 langchain==0.0.148
@@ -13,3 +13,4 @@ discord-py-slash-command
 colorama
 gTTS
 reportlab
+pandasai
