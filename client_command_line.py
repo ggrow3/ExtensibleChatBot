@@ -31,7 +31,8 @@ while True:
     
     # Get the chatbot's response using the get_bot_response_chat_completions method
     response = chatbot.get_bot_response(user_input)
-    
+    print(response)
+    print(type(response))
     if(type(response).__name__ == "gTTS"):
        response.save("welcome.mp3")
        break

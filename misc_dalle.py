@@ -6,7 +6,7 @@ i = ChatBotSettings()
 # Your API Key Here: 👇
 openai.api_key = ChatBotSettings().OPENAI_API_KEY()
 # Your Image Prompt Here: 👇
-prompt = "Create a factory that produces chatbots"
+prompt = "Factory creating chatbots building other chatbots in a factory. Don't include any text in the picture"
 response = openai.Image.create(
     prompt=prompt,
     n=1,

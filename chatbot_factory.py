@@ -1,27 +1,30 @@
-from bot_conversation_chain import BotConversationChain
-from bot_knowledge_base import BotKnowledgeBase
-from typing import Callable, Dict, List, Optional, Union
 import os
 import json
-from typing import Dict, Tuple, List
+from typing import Callable, Dict, List, Optional, Union, Tuple
 from chatbot_settings import ChatBotSettings
+from bot_conversation_chain import BotConversationChain
+from bot_knowledge_base import BotKnowledgeBase
+from bot_dalle_imagine import BotDalle
+from bot_gtts_audio import BotGtts
+from bot_circumference_calculator import BotCirucumferenceTool
 from bot_pinecone import BotPineCone
 from bot_agent_tools import BotAgentTools
+from bot_story_imagine import BotStoryImagine
 from langchain import (HuggingFaceHub, Cohere)
 from langchain.chat_models import ChatOpenAI
 from colorama import Fore, Style, init
-from bot_dalle_imagine import BotDalle
-from bot_gtts_audio import BotGtts
 
 
 class ChatBotFactory:
     services = {
-        'BotConversationChain': BotConversationChain,
-        'BotPineCone': BotPineCone,
-        'BotAgentTools': BotAgentTools,
-        'BotKnowledgeBase': BotKnowledgeBase,
-        'BotDalle': BotDalle,
-        "BotGtts": BotGtts
+        BotConversationChain.__name__ : BotConversationChain,
+        BotPineCone.__name__: BotPineCone,
+        BotAgentTools.__name__: BotAgentTools,
+        BotKnowledgeBase.__name__: BotKnowledgeBase,
+        BotDalle.__name__: BotDalle,
+        BotGtts.__name__: BotGtts,
+        BotCirucumferenceTool.__name__: BotCirucumferenceTool,
+        BotStoryImagine.__name__: BotStoryImagine
     }
 
     llms = {

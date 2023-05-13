@@ -2,10 +2,16 @@ import os
 from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for, jsonify)
 from flask_httpauth import HTTPBasicAuth
-from chatbot_service import ChatBotService
-from langchain_service import LangChainService
-from knowledge_base_service import KnowledgeBaseService
-from chatbot_settings import (get_users,setup_keys)
+from chatbot_factory import ChatBotFactory
+from langchain import (OpenAI,HuggingFaceHub, Cohere)
+from chatbot_settings import ChatBotSettings
+import os
+from langchain.chains.conversation.memory import (ConversationBufferMemory,
+                                                  ConversationSummaryMemory,
+                                                  ConversationBufferWindowMemory,
+                                                  ConversationKGMemory)
+from langchain.llms import Cohere
+
 
 
 app = Flask(__name__)
@@ -15,7 +21,7 @@ auth = HTTPBasicAuth()
 
 @auth.verify_password
 def verify_password(username, password):
-    users = get_users()
+    users = ChatBotSettings().get_website_users()
     if username in users and users[username] == password:
         return username
 
@@ -35,15 +41,12 @@ def chat():
 
     chatbotType = data.get('chatBotType')
     
-    setup_keys()
     #Initialize services
-    langchain_service = LangChainService(
-        os.environ["OPENAI_API_KEY"],  os.environ["PINECONE_API_KEY"],  os.environ["PINECONE_API_ENV"], )
-    knowledge_base_service = KnowledgeBaseService()
-    chatbotService = ChatBotService(langchain_service, knowledge_base_service)
-    # Process the message and generate a response
-    response = chatbotService.chat_with_langchain(message, chatbotType)
+    chatbot_factory = ChatBotFactory()
 
+    chatbot = chatbot_factory.create_service("BotConversationChain", ChatBotSettings(llm=ChatBotFactory().llms["ChatOpenAI"],memory=ConversationBufferMemory(), tools=['serpapi','wolfram-alpha']))
+
+    response = chatbot.get_bot_response(message)
     # Return the response as a JSON object
     return jsonify({'response': response})
 

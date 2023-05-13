@@ -160,7 +160,7 @@ async def on_message(message):
 
 @bot.tree.command(name="chatgpt", description="this is chatgpt")
 @app_commands.describe(thing_to_say="say hello to the chatbot")
-@app_commands.describe(version="versions are BotConversationChainy")
+@app_commands.describe(version="versions are BotConversationChain,BotPineCone,BotAgentTools,BotKnowledgeBases")
 async def chat(interaction: discord.Interaction, thing_to_say: str, version: str):
     print("Received interaction")
 
@@ -171,8 +171,9 @@ async def chat(interaction: discord.Interaction, thing_to_say: str, version: str
     chatbot = chatbot_factory.create_service(version, ChatBotSettings(llm=ChatBotFactory().llms["ChatOpenAI"],memory=ConversationBufferMemory(), tools=['serpapi','wolfram-alpha']))
 
     response = chatbot.get_bot_response(thing_to_say)
-    
-    await interaction.followup.send(response)
+  
+    formatted_response = f"{thing_to_say}: {response}"
+    await interaction.followup.send(formatted_response)
 
 
   #await interaction.response.send_message(response)
