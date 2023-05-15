@@ -14,3 +14,5 @@ colorama
 gTTS
 reportlab
 pandasai
+cohere
+huggingface_hub

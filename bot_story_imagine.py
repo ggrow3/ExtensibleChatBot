@@ -25,10 +25,10 @@ class BotStoryImagine(ABC):
         language = 'en'
         
         messages = [
-            SystemMessage(content="You are an adventure mystery cartoon story telling bot."),
+            SystemMessage(content="You are an adventure mystery story telling bot."),
             HumanMessage(content="Hi AI, what are your main themes?"),
             AIMessage(content="My theme and things is doing good and solve puzzles and learn about science in the world."),
-            HumanMessage(content="I'd like to have you tell me an adventure story with Colin and Ian as my characters.Santorini is a bad guy in the story and so are pollution and externalities caused by man. Tell about regreening earth")
+            HumanMessage(content=text)
         ]
 
         reply = self.llm(messages)

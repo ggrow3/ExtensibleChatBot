@@ -1,0 +1,8 @@
+{
+    "questions": [
+        "How are you feeling overall today?",
+        "Anything causing you pain?",
+        "What is your level of pain? (1-10)",
+        "Are you taking any medications?"
+    ]
+}

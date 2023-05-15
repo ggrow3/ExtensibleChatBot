@@ -17,14 +17,14 @@ class ChatBotSettings:
     def set_environment_variables(self):
         os.environ["PINECONE_API_KEY"] = ''
         os.environ["PINECONE_API_ENV"] = ''
-        os.environ["OPENAI_API_KEY"] = ""
+        os.environ["OPENAI_API_KEY"] = "YOUR_API_KEY"
         os.environ["WOLFRAM_ALPHA_APPID"] = ""
         os.environ["SERPAPI_API_KEY"] = ""
         os.environ["OPENAI_ORGANIZATION_ID"] = ""
         os.environ["DISCORD_BOT_TOKEN"] = ""
         os.environ["KNOWLEDGE_BASE_FILE"] = ""
-        os.environ["COHERE_API_KEY"] = ""
-        os.environ["HUGGINGFACEHUB_API_TOKEN"] = ""
+        os.environ["COHERE_API_KEY"] = "YOUR_API_KEY"
+        os.environ["HUGGINGFACEHUB_API_TOKEN"] = "YOUR_API_KEY"
     
     @classmethod
     def PINECONE_API_KEY(cls):
