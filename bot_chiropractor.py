@@ -26,6 +26,7 @@ from pandasai import PandasAI
 
 import pandas as pd
 
+
 chatbotSettings = ChatBotSettings()
 with open('patient_responses.json', 'r') as f:
     all_responses = json.load(f)
@@ -63,8 +64,29 @@ print(df)
 from pandasai.llm.openai import OpenAI
 llm = OpenAI()
 
+# Create an empty list to store questions and responses
+questions_and_responses = []
+
 while True:
     pandas_ai = PandasAI(llm, conversational=False)
     user_input = input("What data do you want from your patients? ")
     response = pandas_ai.run(df, prompt=user_input)
     print(response)
+
+    # Store the question and response in a dictionary
+    question_response = {
+        "question": user_input,
+        "response": response
+    }
+
+    # Append the question and response to the list
+    questions_and_responses.append(question_response)
+
+    # Check if the user wants to continue
+    cont = input("Do you want to ask another question? (yes/no): ")
+    if cont.lower() != "yes":
+        break
+
+# Save the questions and responses to a JSON file
+with open('questions_and_responses.json', 'w') as f:
+    json.dump(questions_and_responses, f)
