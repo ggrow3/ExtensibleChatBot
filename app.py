@@ -52,7 +52,7 @@ def chat():
 
 @app.route('/mobile')
 @auth.login_required
-def index():
+def mobile():
     print('Request for mobile_chatbot page received')
     return render_template('mobile_chatbot')
 

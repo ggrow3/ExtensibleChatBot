@@ -16,3 +16,4 @@ reportlab
 pandasai
 cohere
 huggingface_hub
+session_info
