@@ -54,7 +54,7 @@ def chat():
 @auth.login_required
 def mobile():
     print('Request for mobile_chatbot page received')
-    return render_template('mobile_chatbot')
+    return render_template('mobile_chatbot.html')
 
 @app.route('/')
 @auth.login_required
