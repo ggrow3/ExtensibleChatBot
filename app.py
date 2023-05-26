@@ -50,6 +50,12 @@ def chat():
     # Return the response as a JSON object
     return jsonify({'response': response})
 
+@app.route('/mobile')
+@auth.login_required
+def index():
+    print('Request for mobile_chatbot page received')
+    return render_template('mobile_chatbot')
+
 @app.route('/')
 @auth.login_required
 def index():
