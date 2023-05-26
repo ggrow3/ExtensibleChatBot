@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - calm-sea-3a51971ddcf64b04bda7b39a685aa55f
+name: victorious-water-fd61e18138ec41d8b09d86400e74a9ad - Web Deploy
 
 on:
   push:
@@ -58,6 +58,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: 'calm-sea-3a51971ddcf64b04bda7b39a685aa55f'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0661BEF0ED844F0E8D58AB24136840FA }}
+          app-name: 'victorious-water-fd61e18138ec41d8b09d86400e74a9ad'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
