@@ -12,6 +12,7 @@ from bot_story_imagine import BotStoryImagine
 from langchain import (HuggingFaceHub, Cohere)
 from langchain.chat_models import ChatOpenAI
 from colorama import Fore, Style, init
+from bot_demo_chain import BotDemoChain
 
 
 class ChatBotFactory:
@@ -23,7 +24,9 @@ class ChatBotFactory:
         BotDalle.__name__: BotDalle,
         BotGtts.__name__: BotGtts,
         BotCirucumferenceTool.__name__: BotCirucumferenceTool,
-        BotStoryImagine.__name__: BotStoryImagine
+        BotStoryImagine.__name__: BotStoryImagine,
+        BotDemoChain.__name__: BotDemoChain
+
     }
 
     LLM_CHAT_OPENAI = "ChatOpenAI"

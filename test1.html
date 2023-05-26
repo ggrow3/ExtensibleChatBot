@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chiropractor Knowledge Graph</title>
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <link href="https://unpkg.com/vis-network/standalone/umd/vis-network.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <!-- Include other styles and scripts -->
+  <style>
+    .dropdown-content {
+      display: none;
+      padding: 5px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+    }
+    
+    .dropdown-content p {
+      margin: 0;
+      padding: 2px 0;
+    }
+    
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <select id="patient-select">
+    <option value="patient1">Patient 1</option>
+    <option value="patient2">Patient 2</option>
+  </select>
+  <div id="demographics"></div>
+  <div id="knowledgeGraph" style="width:800px; height:400px;"></div>
+  <div id="painChartContainer">
+    <div id="painChart"></div>
+  </div>
+  <div id="notesContainer"></div>
+  <div id="dropdownContainer">
+    <div class="dropdown">
+      <button class="dropdown-btn">Bot Responses and Patient's Questions</button>
+      <div class="dropdown-content">
+        <p>Q: How often should I do the stretching exercises?</p>
+        <p>A: It is recommended to do the stretching exercises at least three times a day.</p>
+        <p>Q: Can I perform other exercises along with chiropractic adjustments?</p>
+        <p>A: Yes, you can perform other exercises, but make sure to consult with your chiropractor first.</p>
+        <!-- Add more bot responses and patient's questions as needed -->
+      </div>
+    </div>
+  </div>
+  <script>
+    var patient1Graph = {
+      "demographics": {
+        "name": "John Doe",
+        "age": 35,
+        "gender": "Male",
+        "occupation": "Engineer"
+      },
+      "nodes": [
+        {"id": 1, "label": "Back Pain", "group": "Condition"},
+        {"id": 2, "label": "Chiropractic Adjustment", "group": "Treatment"}
+      ],
+      "edges": [
+        {"from": 2, "to": 1}
+      ],
+      "visits": [
+        { "date": "2023-01-01", "painLevel": 7, "notes": "Doctor's notes for January 1st." },
+        { "date": "2023-02-01", "painLevel": 6, "notes": "Doctor's notes for February 1st." },
+        { "date": "2023-03-01", "painLevel": 5, "notes": "Doctor's notes for March 1st." }
+        // add more visits as needed...
+      ]
+    }
+
+    var patient2Graph = {
+      "demographics": {
+        "name": "Jane Smith",
+        "age": 29,
+        "gender": "Female",
+        "occupation": "Teacher"
+      },
+      "nodes": [
+        {"id": 1, "label": "Hamstring Tightness", "group": "Condition"},
+        {"id": 2, "label": "Stretching", "group": "Treatment"}
+      ],
+      "edges": [
+        {"from": 2, "to": 1}
+      ],
+      "visits": [
+        { "date": "2023-01-01", "painLevel": 8, "notes": "Doctor's notes for January 1st." },
+        { "date": "2023-02-01", "painLevel": 7, "notes": "Doctor's notes for February 1st." },
+        { "date": "2023-03-01", "painLevel": 7, "notes": "Doctor's notes for March 1st." }
+        // add more visits as needed...
+      ]
+    }
+
+    document.getElementById('patient-select').addEventListener('change', function() {
+      var selectedPatient = this.value;
+      var graphData;
+      switch(selectedPatient) {
+        case 'patient1':
+          graphData = patient1Graph;
+          break;
+        case 'patient2':
+          graphData = patient2Graph;
+          break;
+      }
+
+      var demographicsElement = document.getElementById('demographics');
+      demographicsElement.innerHTML = `
+        <h2>Demographics</h2>
+        <p>Name: ${graphData.demographics.name}</p>
+        <p>Age: ${graphData.demographics.age}</p>
+        <p>Gender: ${graphData.demographics.gender}</p>
+        <p>Occupation: ${graphData.demographics.occupation}</p>
+      `;
+
+      var nodes = new vis.DataSet(graphData.nodes);
+      var edges = new vis.DataSet(graphData.edges);
+      var container = document.getElementById('knowledgeGraph');
+      var data = { nodes: nodes, edges: edges };
+      var options = {};
+      var network = new vis.Network(container, data, options);
+
+      var visits = graphData.visits.map(function(visit) {
+        return { x: new Date(visit.date), y: visit.painLevel, notes: visit.notes };
+      });
+
+      var painChartContainer = document.getElementById('painChart');
+      painChartContainer.innerHTML = '';
+      Plotly.newPlot('painChart', [{
+        x: visits.map(function(visit) { return visit.x; }),
+        y: visits.map(function(visit) { return visit.y; }),
+        type: 'scatter',
+        mode: 'lines+markers',
+        marker: { color: 'rgb(75, 192, 192)' },
+        line: { shape: 'spline' },
+        fill: 'tozeroy'
+      }], {
+        title: 'Pain Level Over Time',
+        xaxis: { title: 'Date' },
+        yaxis: { title: 'Pain Level' }
+      });
+
+      var notesContainer = document.getElementById('notesContainer');
+      notesContainer.innerHTML = '';
+      visits.forEach(function(visit) {
+        var notesLink = document.createElement('a');
+        notesLink.href = '#';
+        notesLink.innerHTML = visit.notes;
+        notesLink.addEventListener('click', function(event) {
+          event.preventDefault();
+          // Add your logic to open the doctor's notes here
+          console.log('Open doctor\'s notes: ' + visit.notes);
+        });
+
+        notesContainer.appendChild(notesLink);
+        notesContainer.appendChild(document.createElement('br'));
+      });
+    });
+
+    document.getElementById('patient-select').dispatchEvent(new Event('change'));
+  </script>
+</body>
+</html>

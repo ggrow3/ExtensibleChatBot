@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Collapsible Chatbot</title>
+  <style>
+    .chatbot-container {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  width: 90%;
+  max-width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: all 0.3s ease-out; 
+  background-color: #222;
+  color: #fff; 
+  resize: both; 
+  max-height: 90vh; 
+  max-width: 90vw;
+}
+
+.chatbot-header {
+  background-color: #f1f1f1;
+  padding: 1em;
+  cursor: pointer;
+  color: #000; 
+}
+
+.chatbot-content {
+  padding: 1em;
+  display: none;
+  overflow-y: scroll;
+}
+
+.chatbot-input {
+  display: none;
+}
+
+.chat-message {
+  border-bottom: 1px solid #444; 
+  padding: 0.5em 0;
+}
+
+.chat-message.bot-message {
+  background-color: #444; 
+}
+
+.chat-message.user-message {
+  background-color: #666; 
+}
+
+/* Styling the placeholder */
+#user-input::placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+/* New CSS rules for open and closed states */
+.chatbot-container.closed {
+  height: 10vh;
+}
+
+.chatbot-container.open {
+  height: 80vh;
+}
+
+.chatbot-content.closed {
+  display: none;
+}
+
+.chatbot-content.open {
+  display: block;
+}
+
+.chatbot-input.closed {
+  display: none;
+}
+
+.chatbot-input.open {
+  display: block;
+}
+
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
+  <script>
+    interact('.chatbot-container')
+      .draggable({
+        inertia: true,
+        modifiers: [
+          interact.modifiers.restrictRect({
+            restriction: 'parent',
+            endOnly: true
+          })
+        ],
+        autoScroll: true,
+        listeners: {
+          move: function(event) {
+            dragMoveListener(event);
+            localStorage.setItem('chatbotPositionX', event.target.getAttribute('data-x'));
+            localStorage.setItem('chatbotPositionY', event.target.getAttribute('data-y'));
+          }
+        }
+      })
+      .resizable({
+        edges: { left: true, right: true, bottom: true, top: true }
+      })
+      .on('resizemove', function (event) {
+        var target = event.target;
+        var x = (parseFloat(target.getAttribute('data-x')) || 0)
+        var y = (parseFloat(target.getAttribute('data-y')) || 0)
+        localStorage.setItem('chatbotWidth', event.rect.width);
+        localStorage.setItem('chatbotHeight', event.rect.height);
+
+        target.style.width = event.rect.width + 'px';
+        target.style.height = event.rect.height + 'px';
+
+        x += event.deltaRect.left;
+        y += event.deltaRect.top;
+
+        target.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+
+        target.setAttribute('data-x', x);
+        target.setAttribute('data-y', y);
+      });
+
+    function dragMoveListener (event) {
+      var target = event.target;
+      var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+      var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+      target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+
+      target.setAttribute('data-x', x);
+      target.setAttribute('data-y', y);
+    }
+
+    window.onload = function() {
+      loadChatHistory();
+
+      var chatbotContainer = document.querySelector('.chatbot-container');
+
+      var chatbotPositionX = localStorage.getItem('chatbotPositionX');
+      var chatbotPositionY = localStorage.getItem('chatbotPositionY');
+      var chatbotWidth = localStorage.getItem('chatbotWidth');
+      var chatbotHeight = localStorage.getItem('chatbotHeight');
+
+      if (chatbotPositionX && chatbotPositionY) {
+        chatbotContainer.style.transform = 'translate(' + chatbotPositionX + 'px, ' + chatbotPositionY + 'px)';
+        chatbotContainer.setAttribute('data-x', chatbotPositionX);
+        chatbotContainer.setAttribute('data-y', chatbotPositionY);
+      }
+
+      if (chatbotWidth && chatbotHeight) {
+        chatbotContainer.style.width = chatbotWidth + 'px';
+        chatbotContainer.style.height = chatbotHeight + 'px';
+      }
+
+      var chatState = localStorage.getItem('chatState');
+      if(chatState === 'open') {
+        document.querySelector('.chatbot-content').style.display = 'block';
+        document.querySelector('.chatbot-input').style.display = 'block';
+        chatbotContainer.style.height = '80vh';
+      } else {
+        document.querySelector('.chatbot-content').style.display = 'none';
+        document.querySelector('.chatbot-input').style.display = 'none';
+        chatbotContainer.style.height = '10vh';
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="chatbot-container">
+    <div class="chatbot-header" onclick="toggleChatbot()">Chatbot</div>
+    <div class="chatbot-content">
+      <div id="chat-log"></div>
+      <div class="chatbot-input">
+        <input type="text" id="user-input" placeholder="Type your message here..." />
+        <button onclick="sendUserMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var botGreeting = "Hi tech enthusiast! 🧑‍💻🐍 How can I help you? 🚀";
+    addMessageToChatLog('Bot', botGreeting, 'bot-message');
+
+    function toggleChatbot() {
+      var chatbotContent = document.querySelector('.chatbot-content');
+      var chatbotInput = document.querySelector('.chatbot-input');
+      var chatbotContainer = document.querySelector('.chatbot-container');
+      
+      if (chatbotContent.style.display === 'none') {
+        chatbotContent.style.display = 'block';
+        chatbotInput.style.display = 'block';
+        chatbotContainer.style.height = '80vh';
+        localStorage.setItem('chatState', 'open');
+      } else {
+        chatbotContent.style.display = 'none';
+        chatbotInput.style.display = 'none';
+        chatbotContainer.style.height = '10vh';
+        localStorage.setItem('chatState', 'closed');
+      }
+    }
+
+    function sendUserMessage() {
+      var userInput = document.getElementById('user-input');
+      addMessageToChatLog('User', userInput.value, 'user-message');
+      userInput.value = '';
+
+      simulateAPICall(userInput.value);
+    }
+
+    function simulateAPICall(userMessage) {
+      setTimeout(function() {
+        var botResponse = 'Sorry, I don\'t understand "' + userMessage + '". Can you please provide more details?';
+        addMessageToChatLog('Bot', botResponse, 'bot-message');
+      }, 2000);
+    }
+
+  // Create an array to keep track of the chat history
+var chatHistory = [];
+
+function addMessageToChatLog(sender, message, messageClass) {
+  var chatLog = document.getElementById('chat-log');
+  var chatMessage = '<div class="chat-message ' + messageClass + '"><b>' + sender + ':</b> ' + message + '</div>';
+
+  chatLog.innerHTML += message;
+
+  // Save the message to the chat history
+  chatHistory.push(message);
+  
+  // Save the chat history to localStorage
+  saveChatHistory();
+}
+
+function saveChatHistory() {
+  // Convert the chatHistory array to a JSON string and save it to localStorage
+  localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+}
+
+function loadChatHistory() {
+  // Get the chat history from localStorage and convert it back to an array
+  var savedChatHistory = JSON.parse(localStorage.getItem('chatHistory'));
+
+  // If there was any saved chat history, load it
+  if (savedChatHistory) {
+    chatHistory = savedChatHistory;
+
+    // Add each message in the chat history to the chat log
+    var chatLog = document.getElementById('chat-log');
+    chatLog.innerHTML = chatHistory.join('');
+  }
+}
+
+  </script>
+</body>
+</html>

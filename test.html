@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .chat-window {
+      display: flex;
+    }
+    #sidebar {
+      width: 20%;
+      height: 600px;
+      border-right: 1px solid #ccc;
+      padding: 20px;
+      overflow: auto;
+    }
+    .chat-container {
+      width: 80%;
+      max-width: 800px;
+      height: 600px;
+      margin: 20px auto;
+      border: 1px solid #ccc;
+      padding: 20px;
+      overflow: auto;
+    }
+    .input-area {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+    }
+    .input-area #username {
+      flex: 1;
+    }
+    .input-area input {
+      flex: 6;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-left: 10px;
+    }
+    .input-area button {
+      flex: 2;
+      padding: 10px;
+      margin-left: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .user-message, .bot-message {
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .user-message {
+      background-color: #dcf8c6;
+      align-self: flex-end;
+    }
+    .bot-message {
+      background-color: #ece5dd;
+      align-self: flex-start;
+    }
+    /* Media query for mobile responsive design */
+    @media (max-width: 600px) {
+      .chat-container {
+        width: 95%;
+      }
+      .input-area #username {
+        display: none;
+      }
+      .input-area input {
+        flex: 8;
+        margin-left: 5px;
+      }
+      .input-area button {
+        flex: 3;
+        margin-left: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-window">
+    <div id="sidebar"></div>
+    <div class="chat-container">
+      <div id="chatbox"></div>
+    </div>
+  </div>
+  <div class="input-area">
+    <div id="username">Chiropractor Bot</div>
+    <input type="text" id="user-input">
+    <button id="send-btn">Send</button>
+  </div>
+  <script>
+    const botResponses = [
+      "Could you describe the nature and location of your discomfort?",
+      "Have you ever been diagnosed with a spinal condition?",
+      "Have you recently experienced any injuries?",
+      "Do you have any known allergies, particularly to medication?",
+      "Does your discomfort increase with certain activities or movements?",
+      "Have you ever had chiropractic treatment before?"
+    ];
+
+    function getBotResponse() {
+      return botResponses[Math.floor(Math.random() * botResponses.length)];
+    }
+
+    document.querySelector('#send-btn').addEventListener('click', function() {
+      const userInput = document.querySelector('#user-input');
+      const chatbox = document.querySelector('#chatbox');
+
+      // User message
+      const userMessageContainer = document.createElement('div');
+      userMessageContainer.classList.add('user-message');
+      const userMessage = document.createElement('p');
+      userMessage.textContent = "User:" + userInput.value;
+      userMessageContainer.appendChild(userMessage);
+      chatbox.appendChild(userMessageContainer);
+
+      // Bot response
+      const botMessageContainer = document.createElement('div');
+      botMessageContainer.classList.add('bot-message');
+      const botMessage = document.createElement('p');
+    //   botMessage.textContent = "Chirobot:" + getBotResponse();
+      botMessageContainer.appendChild(botMessage);
+      chatbox.appendChild(botMessageContainer);
+
+      const botResponse = getBotResponse();
+      let i = 0;
+      const intervalId = setInterval(function() {
+        if (i < botResponse.length) {
+          botMessage.textContent += botResponse[i];
+          i++;
+        } else {
+          clearInterval(intervalId);
+        }
+      }, 50);
+
+      const sidebar = document.querySelector('#sidebar');
+      const currentDate = new Date();
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(currentDate.getDate() - 7);
+
+      const newTitle = document.createElement('p');
+      newTitle.textContent = userInput.value;
+
+      const editBtn = document.createElement('button');
+      editBtn.textContent = 'Edit';
+      editBtn.addEventListener('click', function() {
+        const newValue = prompt('Enter new title', newTitle.textContent);
+        if (newValue) newTitle.textContent = newValue;
+      });
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.addEventListener('click', function() {
+        sidebar.removeChild(newTitle);
+        sidebar.removeChild(editBtn);
+        sidebar.removeChild(deleteBtn);
+      });
+
+      const newLabel = document.createElement('span');
+      if (currentDate > sevenDaysAgo) {
+        newLabel.textContent = ' (Today)';
+      } else {
+        newLabel.textContent = ' (Previous 7 days)';
+      }
+
+      newTitle.appendChild(newLabel);
+      sidebar.appendChild(newTitle);
+      sidebar.appendChild(editBtn);
+      sidebar.appendChild(deleteBtn);
+
+      userInput.value = '';
+    });
+  </script>
+</body>
+</html>
