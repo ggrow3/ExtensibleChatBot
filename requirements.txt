@@ -1,3 +1,4 @@
+pycairo
 Flask==2.2.5
 wolframalpha
 google-search-results==2.4.2
@@ -13,7 +14,6 @@ discord-py-slash-command
 colorama
 gTTS
 reportlab
-pandasai
 cohere
 huggingface_hub
-session_info
+
